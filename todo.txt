@@ -1,0 +1,1 @@
+Remove help files like todo.txt and adding-code-or-files.txt
