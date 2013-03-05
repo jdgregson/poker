@@ -1,0 +1,13 @@
+Adding files:
+
+  git add <file>
+  git commit -m "added <file> blah blah blah"
+
+Updating file:
+
+  <change file>
+  git commit -m "changed <file> blah blah blah"
+
+Pushing changes to github so everybody can see them:
+
+  git push origin master
