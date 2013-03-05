@@ -11,3 +11,7 @@ Updating file:
 Pushing changes to github so everybody can see them:
 
   git push origin master
+
+Update local repo with changes from github:
+
+  git pull
