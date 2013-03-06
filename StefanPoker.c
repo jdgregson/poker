@@ -4,14 +4,13 @@
 
 typedef struct card 
 {
-    unsigned face:4,
+    unsigned short face:4,
             suit:2,
             dealt:1;
 } CARD;
 
 char * face[14] = {"","ACE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","JACK","QUEEN","KING"};
 char * suit[4] = {"HEARTS","DIAMONDS","CLUBS","SPADES"};
-
 
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
@@ -28,6 +27,7 @@ main()
 
     buildDeck(deck);
     deal(deck,hand);
+
     //discard(deck,&hand[h]);
 
     /*for(i=0;i<52;i++) 
@@ -46,22 +46,23 @@ main()
     for(h=0; h<5;h++)
     {
         printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
+    }
+	deal(deck,hand);
+    for(h=0; h<5;h++)
+    {
+        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
     }*/
 
 
-    for(i = 0; i<52; i++)//clears deck
-    {
-        deck[i].dealt = 0;
-    }
-    
-	//system("pause");
+	printf("Press any key to continue . . .");
+    fflush(stdin); getchar();
     exit(0);
 }
 void buildDeck(CARD deck[])
 {
     int f,s;//face suit
     int i = 0;
-	
+    
     for(s = 0; s < 4; s++)
     {	
         for(f = 1; f <= 13; f++)
@@ -78,7 +79,12 @@ void deal(CARD deck[], CARD hand[])
 {
     int i;
     int h = 0;
-	
+
+    for(i = 0; i<52; i++)//clears deck
+    {
+        deck[i].dealt = 0;
+    }
+
     while(h<5)
     {
         i = rand()%52;
