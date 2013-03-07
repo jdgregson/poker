@@ -7,26 +7,27 @@
 #include <ctype.h>
 
 #ifdef __unix__
-#define CLEAR system("clear");
-#define BUFFER_FLUSH flushBuffer()
-#define PAUSE getchar();
-#else defined _WIN32
-#define CLEAR system("cls");
-#define BUFFER_FLUSH fflush(stdin);
-#define PAUSE system("pause");
-  enum D_CHARS {
-		PIPE = 124,
-		HORIZ = 205,
-		L_T_CORN = 201,
-		R_T_CORN = 187,
-		L_B_CORN = 200,
-		R_B_CORN = 188,
-		T_TEE = 203,
-		B_TEE = 202,
-		L_TEE = 204,
-		R_TEE = 185,
-		CROSS = 206
-	};
+    #define CLEAR system("clear");
+    #define BUFFER_FLUSH flushBuffer()
+    #define PAUSE getchar();
+#endif
+#ifdef _WIN32
+    #define CLEAR system("cls");
+    #define BUFFER_FLUSH fflush(stdin);
+    #define PAUSE system("pause");
+    enum D_CHARS {
+          PIPE = 124,
+          HORIZ = 205,
+          L_T_CORN = 201,
+          R_T_CORN = 187,
+          L_B_CORN = 200,
+          R_B_CORN = 188,
+          T_TEE = 203,
+          B_TEE = 202,
+          L_TEE = 204,
+          R_TEE = 185,
+          CROSS = 206
+    };
 #endif
 
 typedef struct card 
