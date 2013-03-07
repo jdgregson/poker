@@ -55,7 +55,7 @@ main()
 
 
 	printf("Press any key to continue . . .");
-    fflush(stdin); getchar(); //I really like the code, but I think we could replace fflush with a function to clear the buffer.
+    fflush(stdin); getchar(); 
     exit(0);
 }
 void buildDeck(CARD deck[])
