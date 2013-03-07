@@ -6,7 +6,8 @@ typedef struct card
 {
     unsigned short face:4,
             suit:2,
-            dealt:1;
+            dealt:1,
+	        discard:1;
 } CARD;
 
 char * face[14] = {"","ACE","TWO","THREE","FOUR","FIVE","SIX","SEVEN","EIGHT","NINE","TEN","JACK","QUEEN","KING"};
@@ -14,7 +15,7 @@ char * suit[4] = {"HEARTS","DIAMONDS","CLUBS","SPADES"};
 
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
-void discard(CARD [], CARD *);
+void discard(CARD [], CARD []);
 
 main()
 {
@@ -28,34 +29,15 @@ main()
     buildDeck(deck);
     deal(deck,hand);
 
-    //discard(deck,&hand[h]);
 
-    /*for(i=0;i<52;i++) 
-    {
-        printf("\n%s of %s",face[deck[i].face],suit[deck[i].suit]);
-    }
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }
-    for(h=0; h<5;h++)
-    {
-        discard(deck,&hand[h]);
-    }
-    printf("\n\n");
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }
-	deal(deck,hand);
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }*/
+
+    discard(deck,hand);
+
+
 
 
 	printf("Press any key to continue . . .");
-    fflush(stdin); getchar(); 
+    fflush(stdin); getchar();
     exit(0);
 }
 void buildDeck(CARD deck[])
@@ -70,6 +52,7 @@ void buildDeck(CARD deck[])
             deck[i].face = f;
             deck[i].suit = s;
             deck[i].dealt = 0;
+			deck[i].discard = 0;
             i++;
             }
     }
@@ -80,9 +63,10 @@ void deal(CARD deck[], CARD hand[])
     int i;
     int h = 0;
 
-    for(i = 0; i<52; i++)//clears deck
+    for(i = 0; i<52; i++)//clears deck 
     {
         deck[i].dealt = 0;
+		deck[i].discard = 0;
     }
 
     while(h<5)
@@ -97,18 +81,24 @@ void deal(CARD deck[], CARD hand[])
     }
 
 }
-void discard(CARD deck[], CARD * card)
+void discard(CARD deck[], CARD hand[])
 {
     int i;
-    while(1)
+	int h;
+	for(h = 0; h<5; h++)
     {
-        i = rand()%52;
-        if(!deck[i].dealt)
+	  if(!deck[h].discard)//deck[h].discard == 1
+      {
+        while(1)
         {
-        deck[i].dealt = 1;
-        *card = deck[i];
-        break;
-        }
-    }
-
+          i = rand()%52;
+          if(!deck[i].dealt)
+          {
+          deck[i].dealt = 1;
+          hand[h] = deck[i];
+          break;
+          }
+		}
+      }
+	}
 }
