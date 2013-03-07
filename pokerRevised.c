@@ -12,6 +12,19 @@
     #define CLEAR system("clear");
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar();
+    enum D_CHARS {
+          PIPE = '|',
+          HORIZ = '-',
+          L_T_CORN = '*',
+          R_T_CORN = '*',
+          L_B_CORN = '*',
+          R_B_CORN = '*',
+          T_TEE = '*',
+          B_TEE = '*',
+          L_TEE = '*',
+          R_TEE = '*',
+          CROSS = '+'
+    };
 #endif
 #ifdef _WIN32
     #define CLEAR system("cls");
@@ -46,7 +59,7 @@ void buildDeck(CARD []);
 void deal(CARD [], CARD []);
 void discard(CARD [], CARD *);
 void flushBuffer(void);
-void printHand(void);
+void printHand(CARD *, CARD *);
 
 main()
 {
@@ -87,7 +100,7 @@ main()
 
 
 	printf("Press any key to continue . . .");
-    BUFFER_FLUSH
+    BUFFER_FLUSH;
 	getchar();
     exit(0);
 }
