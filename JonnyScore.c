@@ -21,7 +21,7 @@ int score(CARD * hand)
     int isFlush = 0;
 
     // go through the hand and record the cards that we have
-    for(i=0;i<5;i++)
+    for(i=0; i<5; i++)
     {
         (values[hand[i].face])++;
     }
@@ -123,6 +123,7 @@ int score(CARD * hand)
     }
 
     // check for two pair
+    flag = 0;
     for(i=1; i<14; i++)
     {
         if(values[i] == 2)
