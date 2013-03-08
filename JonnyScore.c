@@ -137,7 +137,7 @@ int score(CARD * hand)
     }
 
     // check for Jacks or better and one pair
-    if(values[11] == 2 || values[12] == 2 || values[13] == 2)
+    if(values[1] == 2 || values[11] == 2 || values[12] == 2 || values[13] == 2)
     {
         return(1);
     }
