@@ -104,7 +104,7 @@ int score(CARD * hand)
     // check for flush
     if(isFlush)
     {
-        return(5)
+        return(5);
     }
 
     // check for straight
@@ -137,16 +137,9 @@ int score(CARD * hand)
     }
 
     // check for Jacks or better and one pair
-    if(values[11] || values[12] || values[13])
+    if(values[11] == 2 || values[12] == 2 || values[13] == 2)
     {
-        for(i=1; i<14; i++)
-        {
-            if(values[i] == 2)
-            {
-                return(1);
-            }
-        }
-
+        return(1);
     }
 
     return(0);
