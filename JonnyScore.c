@@ -144,3 +144,44 @@ int score(CARD * hand)
 
     return(0);
 }
+
+
+void printScore(int score)
+{
+    switch(score)
+    {
+        case 0: printf("You got nothing!");
+                break;
+
+        case 1: printf("You got a pair of jacks or better!");
+                break;
+
+        case 2: printf("You got two-pair!");
+                break;
+
+        case 3: printf("You got three-of-a-kind!");
+                break;
+
+        case 4: printf("You got a straight!");
+                break;
+
+        case 5: printf("You got a flush!");
+                break;
+
+        case 6: printf("You got a full-house!");
+                break;
+
+        case 7: printf("You got four-of-a-kind!");
+                break;
+
+        case 8: printf("You got a straight flush!");
+                break;
+
+        case 9: printf("You got a royal flush!");
+                break;
+
+        default: printf("You got an invalid score! (%d) ");
+                 printf("How is that even possible?");
+                 break;
+    }
+}
