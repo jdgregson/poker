@@ -2,48 +2,66 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
-#include"wincurse.h"
 #include<string.h>
 #include <ctype.h>
+#include"wincurse.h"
 
 #ifdef __unix__
-#define CLEAR system("clear");
-#define BUFFER_FLUSH flushBuffer()
-#define PAUSE getchar();
-#else defined _WIN32
-#define CLEAR system("cls");
-#define BUFFER_FLUSH fflush(stdin);
-#define PAUSE system("pause");
-	enum D_CHARS {
-		VERT = 124,
-		HORIZ = 205,
-		L_T_CORN = 201,
-		R_T_CORN = 187,
-		L_B_CORN = 200,
-		R_B_CORN = 188,
-		T_TEE = 203,
-		B_TEE = 202,
-		L_TEE = 204,
-		R_TEE = 185,
-		CROSS = 206
-	};
+    #define CLEAR system("clear");
+    #define BUFFER_FLUSH flushBuffer()
+    #define PAUSE getchar();
+    #define PRINTHAND printUNIXHand
+    enum D_CHARS {
+          VERT = '|',
+          HORIZ = '_',
+          L_T_CORN = '*',
+          R_T_CORN = '*',
+          L_B_CORN = '*',
+          R_B_CORN = '*',
+          T_TEE = '*',
+          B_TEE = '*',
+          L_TEE = '*',
+          R_TEE = '*',
+          CROSS = '+'
+    };
+#endif
+#ifdef _WIN32
+    #define CLEAR system("cls")
+    #define BUFFER_FLUSH fflush(stdin)
+    #define PAUSE system("pause")
+    #define PRINTHAND printDOSHand
+	    enum D_CHARS {
+          VERT = '|',
+          HORIZ = '_',
+          L_T_CORN = '*',
+          R_T_CORN = '*',
+          L_B_CORN = '*',
+          R_B_CORN = '*',
+          T_TEE = '*',
+          B_TEE = '*',
+          L_TEE = '*',
+          R_TEE = '*',
+          CROSS = '+'
+    };
 #endif
 
 typedef struct card 
 {
     unsigned short face:4,
             suit:2,
-            dealt:1;
+            dealt:1,
+	        discard:1;
 } CARD;
 
 char * face[14] = {"","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
-char * suit[4] = {"H","D","C","S"};
+char * suit[4] = {"3","4","5","6"};
 
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
-void discard(CARD [], CARD *);
+void discard(CARD [], CARD []);
 void flushBuffer(void);
-void printHand(void);
+void printDOSHand(CARD[], CARD[]);
+void printUNIXHand(CARD[], CARD[]);
 
 main()
 {
@@ -56,35 +74,15 @@ main()
 
     buildDeck(deck);
     deal(deck,hand);
+    PRINTHAND(deck,hand);
 
-    //discard(deck,&hand[h]);
+	discard(deck,hand);
 
-    /*for(i=0;i<52;i++) 
-    {
-        printf("\n%s of %s",face[deck[i].face],suit[deck[i].suit]);
-    }
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }
-    for(h=0; h<5;h++)
-    {
-        discard(deck,&hand[h]);
-    }
-    printf("\n\n");
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }
-	deal(deck,hand);
-    for(h=0; h<5;h++)
-    {
-        printf("\n%s of %s",face[hand[h].face],suit[hand[h].suit]);
-    }*/
+	PRINTHAND(deck,hand);
 
 
 	printf("Press any key to continue . . .");
-    BUFFER_FLUSH
+    BUFFER_FLUSH;
 	getchar();
     exit(0);
 }
@@ -100,6 +98,7 @@ void buildDeck(CARD deck[])
             deck[i].face = f;
             deck[i].suit = s;
             deck[i].dealt = 0;
+			deck[i].discard = 0;
             i++;
             }
     }
@@ -110,9 +109,10 @@ void deal(CARD deck[], CARD hand[])
     int i;
     int h = 0;
 
-    for(i = 0; i<52; i++)//clears deck
+    for(i = 0; i<52; i++)//clears deck 
     {
         deck[i].dealt = 0;
+		deck[i].discard = 0;
     }
 
     while(h<5)
@@ -125,80 +125,88 @@ void deal(CARD deck[], CARD hand[])
         h++;
         }
     }
-
-	printHand(deck, hand);
-
 }
-void discard(CARD deck[], CARD * card)
+void discard(CARD deck[], CARD hand[])
 {
     int i;
-    while(1)
+	int h;
+	for(h = 0; h<5; h++)
     {
-        i = rand()%52;
-        if(!deck[i].dealt)
+	  if(deck[h].discard == 1)
+      {
+        while(1)
         {
-        deck[i].dealt = 1;
-        *card = deck[i];
-        break;
-        }
-    }
-
+          i = rand()%52;
+          if(!deck[i].dealt)
+          {
+          deck[i].dealt = 1;
+          hand[h] = deck[i];
+          break;
+          }
+		}
+      }
+	}
 }
-void printHand(CARD deck[], CARD hand[])
+void printDOSHand(CARD deck[], CARD hand[])
 {
-	int x = 0;
-	int y = 0;
+	int i = 1;
 
+	//printf("%c%c", face[hand[i].face], suit[hand[i].suit]);
+	i++;
 
-	box(30, 1, 12, 13);
+	box(12, 1, 12, 13); //first card
 
-	box(30, 15, 12, 13);
+	box(12, 15, 12, 13);// second card
 
-	box(30, 29, 12, 13);
+	box(12, 29, 12, 13); //third card
 
-	box(30, 43, 12, 13);
+	box(12, 43, 12, 13);//fourth card
 
-	box(30, 58, 12, 13);
+	box(12, 58, 12, 13);//fifth card
 
-	
+	xya(13, 2);
 
+	printf("%c%c", hand[1].face, hand[2].suit); //debug
+	i++;
+}
+void printUNIXHand(CARD deck[], CARD hand[])
+{
+	int i;
+	int x, y;
 
-	//	int i;
-	//int x, y;
+	printf("%c", L_T_CORN);
+	for(y=0; y<5; y++) {
+		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
+		if(y<4) { printf("%c", T_TEE); }
+	}
+	printf("%c\n", R_T_CORN);
 
-	//printf("%c", L_T_CORN);
-	//for(y=0; y<5; y++) {
-	//	for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-	//	if(y<4) { printf("%c", T_TEE); }
-	//}
-	//printf("%c\n", R_T_CORN);
+	printf("%c   1    %c   2    %c   3    %c   4    %c   5    %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
 
-	//printf("%c   1    %c   2    %c   3    %c   4    %c   5    %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
+	printf("%c", L_TEE);
+	for(y=0; y<5; y++) {
+		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
+		if(y<4) { printf("%c", CROSS); }
+	}
+	printf("%c\n", R_TEE);
 
-	//printf("%c", L_TEE);
-	//for(y=0; y<5; y++) {
-	//	for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-	//	if(y<4) { printf("%c", CROSS); }
-	//}
-	//printf("%c\n", R_TEE);
+	for(i=0;i<5;i++)printf("%c %c%2s    ", VERT, suit[hand[i].suit], face[hand[i].face]);
+	printf("%c\n", VERT);
+	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
+	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
+	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
+	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
+	for(i=0;i<5;i++){ printf("%c    %-2s%c ", VERT, face[hand[i].face], suit[hand[i].suit]); }
+	printf("%c\n", VERT);
 
-	//for(i=0;i<5;i++)printf("%c %c%2s    ", VERT, suit[hand[i].suit], face[hand[i].face]);
-	//printf("%c\n", VERT);
-	//printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	//printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	//printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	//printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	//for(i=0;i<5;i++){ printf("%c    %-2s%c ", VERT, face[hand[i].face], suit[hand[i].suit]); }
-	//printf("%c\n", VERT);
+	printf("%c", L_B_CORN);
+	for(y=0; y<5; y++) {
+		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
+		if(y<4) { printf("%c", B_TEE); }
+	}
+	printf("%c\n", R_B_CORN);
 
-	//printf("%c", L_B_CORN);
-	//for(y=0; y<5; y++) {
-	//	for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-	//	if(y<4) { printf("%c", B_TEE); }
-	//}
-	//printf("%c\n", R_B_CORN);
-
-	//printf("\n");
+	printf("\n");
 }
 void flushBuffer(void)
 {
