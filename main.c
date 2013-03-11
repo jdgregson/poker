@@ -7,9 +7,9 @@
 #include"wincurse.h"
 
 #ifdef __unix__
-    #define CLEAR system("clear");
+    #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
-    #define PAUSE getchar();
+    #define PAUSE getchar()
     #define PRINTHAND printUNIXHand
     enum D_CHARS {
           VERT = '|',
