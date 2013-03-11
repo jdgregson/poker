@@ -10,39 +10,11 @@
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
-    #define PRINTHAND printUNIXHand
-    enum D_CHARS {
-          VERT = '|',
-          HORIZ = '_',
-          L_T_CORN = '*',
-          R_T_CORN = '*',
-          L_B_CORN = '*',
-          R_B_CORN = '*',
-          T_TEE = '*',
-          B_TEE = '*',
-          L_TEE = '*',
-          R_TEE = '*',
-          CROSS = '+'
-    };
 #endif
 #ifdef _WIN32
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
-    #define PRINTHAND printDOSHand
-	    enum D_CHARS {
-          VERT = '|',
-          HORIZ = '_',
-          L_T_CORN = '*',
-          R_T_CORN = '*',
-          L_B_CORN = '*',
-          R_B_CORN = '*',
-          T_TEE = '*',
-          B_TEE = '*',
-          L_TEE = '*',
-          R_TEE = '*',
-          CROSS = '+'
-    };
 #endif
 
 typedef struct card 
@@ -53,7 +25,7 @@ typedef struct card
 	        discard:1;
 } CARD;
 
-char * face[14] = {"","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
+char * face[14] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13"};
 char * suit[4] = {"3","4","5","6"};
 
 void buildDeck(CARD []);
@@ -61,7 +33,7 @@ void deal(CARD [], CARD []);
 void discard(CARD [], CARD []);
 void flushBuffer(void);
 void printDOSHand(CARD[], CARD[]);
-void printUNIXHand(CARD[], CARD[]);
+void printHand(CARD[], CARD[]);
 
 main()
 {
@@ -74,11 +46,11 @@ main()
 
     buildDeck(deck);
     deal(deck,hand);
-    PRINTHAND(deck,hand);
+    printHand(deck,hand);
 
 	discard(deck,hand);
 
-	PRINTHAND(deck,hand);
+	printHand(deck,hand);
 
 
 	printf("Press any key to continue . . .");
@@ -147,12 +119,33 @@ void discard(CARD deck[], CARD hand[])
       }
 	}
 }
-void printDOSHand(CARD deck[], CARD hand[])
+void printHand(CARD deck[], CARD hand[])
 {
-	int i = 1;
+	int i = 0;
+	int e = 2;
 
 	//printf("%c%c", face[hand[i].face], suit[hand[i].suit]);
-	i++;
+
+	xya(13, 2);
+	printf("%s%c", hand[0].face, hand[0].suit); //debug
+	xya(13, 16);
+	printf("%c%c", hand[1].face, hand[1].suit); //debug
+	xya(13, 22);
+	printf("%c%c", hand[2].face, hand[2].suit); //debug
+	xya(13, 32);
+	printf("%c%c", hand[3].face, hand[3].suit); //debug
+	xya(13, 44);
+	printf("%c%c", hand[4].face, hand[4].suit); //debug
+
+	
+
+	//while(i > 5)
+	//{
+	//	xya(13, e);
+	//	printf("%c%c", hand[0].face, hand[0].suit); //debug
+	//	i++; 
+	//	e = e+5;
+	//}
 
 	box(12, 1, 12, 13); //first card
 
@@ -163,50 +156,7 @@ void printDOSHand(CARD deck[], CARD hand[])
 	box(12, 43, 12, 13);//fourth card
 
 	box(12, 58, 12, 13);//fifth card
-
-	xya(13, 2);
-
-	printf("%c%c", hand[1].face, hand[2].suit); //debug
 	i++;
-}
-void printUNIXHand(CARD deck[], CARD hand[])
-{
-	int i;
-	int x, y;
-
-	printf("%c", L_T_CORN);
-	for(y=0; y<5; y++) {
-		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-		if(y<4) { printf("%c", T_TEE); }
-	}
-	printf("%c\n", R_T_CORN);
-
-	printf("%c   1    %c   2    %c   3    %c   4    %c   5    %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-
-	printf("%c", L_TEE);
-	for(y=0; y<5; y++) {
-		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-		if(y<4) { printf("%c", CROSS); }
-	}
-	printf("%c\n", R_TEE);
-
-	for(i=0;i<5;i++)printf("%c %c%2s    ", VERT, suit[hand[i].suit], face[hand[i].face]);
-	printf("%c\n", VERT);
-	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	printf("%c        %c        %c        %c        %c        %c\n", VERT, VERT, VERT, VERT, VERT, VERT);
-	for(i=0;i<5;i++){ printf("%c    %-2s%c ", VERT, face[hand[i].face], suit[hand[i].suit]); }
-	printf("%c\n", VERT);
-
-	printf("%c", L_B_CORN);
-	for(y=0; y<5; y++) {
-		for(x = 0; x<8; x++) { printf("%c", HORIZ); }
-		if(y<4) { printf("%c", B_TEE); }
-	}
-	printf("%c\n", R_B_CORN);
-
-	printf("\n");
 }
 void flushBuffer(void)
 {
