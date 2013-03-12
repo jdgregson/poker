@@ -10,11 +10,20 @@
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
+    #define HEART "H"
+    #define DIAMOND "D"
+    #define SPADE "C"
+    #define CLUB "S"
 #endif
 #ifdef _WIN32
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
+    #define HEART "3"
+    #define DIAMOND "4"
+    #define CLUB "5"
+    #define SPADE "6"
+
 #endif
 
 typedef struct card 
@@ -25,8 +34,8 @@ typedef struct card
 	        discard:1;
 } CARD;
 
-char * face[14] = {"","1","2","3","4","5","6","7","8","9","10","11","12","13"};
-char * suit[4] = {"3","4","5","6"};
+char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
+char * suit[4] = {HEART, CLUB, SPADE, DIAMOND};
 
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
@@ -47,6 +56,15 @@ main()
     buildDeck(deck);
     deal(deck,hand);
     printHand(deck,hand);
+
+	xya(1, 30);
+
+	printf("Welcome to video poker!");
+	box(3, 1, 3, 80);
+
+	xya(5, 27);
+
+	printf(" Please choose a card to discard: ");
 
 	discard(deck,hand);
 
@@ -122,30 +140,30 @@ void discard(CARD deck[], CARD hand[])
 void printHand(CARD deck[], CARD hand[])
 {
 	int i = 0;
-	int e = 2;
+	int e = 2; //14 spaces between each card.
 
 	//printf("%c%c", face[hand[i].face], suit[hand[i].suit]);
 
-	xya(13, 2);
-	printf("%s%c", hand[0].face, hand[0].suit); //debug
-	xya(13, 16);
-	printf("%c%c", hand[1].face, hand[1].suit); //debug
-	xya(13, 22);
-	printf("%c%c", hand[2].face, hand[2].suit); //debug
-	xya(13, 32);
-	printf("%c%c", hand[3].face, hand[3].suit); //debug
-	xya(13, 44);
-	printf("%c%c", hand[4].face, hand[4].suit); //debug
+	//xya(13, 2);
+	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
+	//xya(13, 16);i++;
+	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
+	//xya(13, 30);i++;
+	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
+	//xya(13, 44);i++;
+	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
+	//xya(13, 59);i++;
+	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
 
 	
 
-	//while(i > 5)
-	//{
-	//	xya(13, e);
-	//	printf("%c%c", hand[0].face, hand[0].suit); //debug
-	//	i++; 
-	//	e = e+5;
-	//}
+	while(i < 5)
+	{
+		xya(13, e);
+		printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug , hand[i].suit
+		i++; 
+		e = e+14;
+	}
 
 	box(12, 1, 12, 13); //first card
 
@@ -155,8 +173,7 @@ void printHand(CARD deck[], CARD hand[])
 
 	box(12, 43, 12, 13);//fourth card
 
-	box(12, 58, 12, 13);//fifth card
-	i++;
+	box(12, 57, 12, 13);//fifth card
 }
 void flushBuffer(void)
 {
