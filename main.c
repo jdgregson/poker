@@ -4,7 +4,6 @@
 #include<time.h>
 #include<string.h>
 #include <ctype.h>
-#include"score.h"
 
 #ifdef __unix__
     #include "unixcurs.h"
