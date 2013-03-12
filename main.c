@@ -4,9 +4,9 @@
 #include<time.h>
 #include<string.h>
 #include <ctype.h>
-#include"wincurse.h"
 
 #ifdef __unix__
+    #include "unixcurs.h"
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
@@ -16,6 +16,7 @@
     #define CLUB "S"
 #endif
 #ifdef _WIN32
+    #include "wincurs.h"
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
@@ -57,6 +58,7 @@ main()
     deal(deck,hand);
     printHand(deck,hand);
 
+    CLEAR;
 	xya(1, 30);
 
 	printf("Welcome to video poker!");
