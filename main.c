@@ -4,9 +4,9 @@
 #include<time.h>
 #include<string.h>
 #include <ctype.h>
+#include"wincurse.h"
 
 #ifdef __unix__
-    #include "unixcurs.h"
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
@@ -16,23 +16,22 @@
     #define CLUB "S"
 #endif
 #ifdef _WIN32
-    #include "wincurse.h"
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
-    #define HEART "3"
-    #define DIAMOND "4"
-    #define CLUB "5"
-    #define SPADE "6"
+    #define HEART 3
+    #define DIAMOND 4
+    #define CLUB 5
+    #define SPADE 6
 
 #endif
 
 typedef struct card 
 {
     unsigned short face:4,
-                   suit:2,
-                   dealt:1,
-                   discard:1;
+            suit:2,
+            dealt:1,
+	        discard:1;
 } CARD;
 
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
@@ -44,8 +43,7 @@ void discard(CARD [], CARD []);
 void flushBuffer(void);
 void printDOSHand(CARD[], CARD[]);
 void printHand(CARD[], CARD[]);
-void printScore(int);
-int score(CARD);
+
 main()
 {
     int i = 0;
@@ -59,43 +57,40 @@ main()
     deal(deck,hand);
     printHand(deck,hand);
 
-    CLEAR;
-    xya(1, 30);
+	xya(1, 30);
 
-    printf("Welcome to video poker!");
-    box(3, 1, 3, 80);
+	printf("Welcome to video poker!");
+	box(3, 1, 3, 80);
 
-    xya(5, 27);
+	xya(5, 27);
 
-    printf(" Please choose a card to discard: ");
+	printf(" Please choose a card to discard: ");
 
-    discard(deck,hand);
+	//do input for discard function here. (scanf for x's don't forget the toupper)
 
-	score(hand);
+	discard(deck,hand);
 
-    printHand(deck,hand);
-
-	printHand(score);
+	printHand(deck,hand);
 
 
-    printf("Press any key to continue . . .");
+	printf("Press any key to continue . . .");
     BUFFER_FLUSH;
-    getchar();
+	getchar();
     exit(0);
 }
 void buildDeck(CARD deck[])
 {
     int f,s;//face suit
     int i = 0;
-
+    
     for(s = 0; s < 4; s++)
-    {
+    {	
         for(f = 1; f <= 13; f++)
             {
             deck[i].face = f;
             deck[i].suit = s;
             deck[i].dealt = 0;
-            deck[i].discard = 0;
+			deck[i].discard = 0;
             i++;
             }
     }
@@ -109,7 +104,7 @@ void deal(CARD deck[], CARD hand[])
     for(i = 0; i<52; i++)//clears deck 
     {
         deck[i].dealt = 0;
-        deck[i].discard = 0;
+		deck[i].discard = 0;
     }
 
     while(h<5)
@@ -129,7 +124,7 @@ void discard(CARD deck[], CARD hand[])
 	int h;
 	for(h = 0; h<5; h++)
     {
-      if(deck[h].discard == 1)
+	  if(deck[h].discard == 1)
       {
         while(1)
         {
@@ -147,231 +142,40 @@ void discard(CARD deck[], CARD hand[])
 void printHand(CARD deck[], CARD hand[])
 {
 	int i = 0;
-	int e = 2; //14 spaces between each card.
+	int a = 2; //14 spaces between each card.
+	int b = 10;
 
-	//printf("%c%c", face[hand[i].face], suit[hand[i].suit]);
+	while(i < 5)
+	{
+		xya(13, a);
+		printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug , face[hand[i].face], suit[hand[i].suit]
+		i++; 
+		a = a+14;
+	}
+	i = 0;
+	while(i < 5)
+	{
+		xya(22, b);
+		printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug , hand[i].suit
+		i++; 
+		b = b+14;
+	}
 
-	//xya(13, 2);
-	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
-	//xya(13, 16);i++;
-	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
-	//xya(13, 30);i++;
-	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
-	//xya(13, 44);i++;
-	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
-	//xya(13, 59);i++;
-	//printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug
 
+	xya(14, 27);
 
+	box(12, 1, 12, 13); //first card
 
-    while(i < 5)
-    {
-        xya(13, e);
-        printf("%s%c", face[hand[i].face], suit[hand[i].suit]); //debug , hand[i].suit
-        i++;
-        e = e+14;
-    }
+	box(12, 15, 12, 13);// second card
 
-    box(12, 1, 12, 13); //first card
+	box(12, 29, 12, 13); //third card
 
-    box(12, 15, 12, 13);// second card
+	box(12, 43, 12, 13);//fourth card
 
-    box(12, 29, 12, 13); //third card
-
-    box(12, 43, 12, 13);//fourth card
-
-    box(12, 57, 12, 13);//fifth card
+	box(12, 57, 12, 13);//fifth card
 }
 void flushBuffer(void)
 {
-    char c;
-    while( (c = fgetc(stdin)) != '\n' && c != EOF);
+	char c;
+	while( (c = fgetc(stdin)) != '\n' && c != EOF);
 }
-int score(CARD * hand)
-{
-    /*  return values
-    *
-    *  0: nothing
-    *  1: pair, jacks or better
-    *  2: two-pair
-    *  3: three-of-a-kind
-    *  4: straight
-    *  5: flush
-    *  6: full house
-    *  7: four-of-a-kind
-    *  8: straight flush
-    *  9: royal flush
-    */
-
-    int values[14] = {0};
-    int i;
-    int flag = 0;
-    int isStraight = 0;
-    int isFlush = 0;
-
-    // go through the hand and record the cards that we have
-    for(i=0; i<5; i++)
-    {
-        (values[hand[i].face])++;
-    }
-
-    // check for flush
-    flag = 1;
-    for(i=0; i<4; i++)
-    {
-        if(!(hand[i].suit == hand[i+1].suit))
-        {
-            flag = 0;
-            break;
-        }
-    }
-    if(flag)
-    {
-        isFlush = 1;
-    }
-
-    // check for straight
-    flag = 0;
-    for(i=1; i<14; i++)
-    {
-        if(values[i] == 1)
-        {
-            flag++;
-            if(flag == 5)
-            {
-                break;
-            }
-        }
-        else
-        {
-            flag = 0;
-        }
-    }
-    if(flag == 5)
-    {
-        isStraight = 1;
-    }
-
-    // check for royal flush
-    if(values[1] && values[10] && values[11] && values[12] && values[13])
-    {
-        if(isFlush)
-        {
-            return(9);
-        }
-    }
-
-    // check for straight flush
-    if(isStraight && isFlush)
-    {
-        return(8);
-    }
-
-    // check for four-of-a-kind
-    for(i=1; i<14; i++)
-    {
-        if(values[i] == 4)
-        {
-            return(7);
-        }
-    }
-
-    // check for full house
-    flag = 0;
-    for(i=1; i<14; i++)
-    {
-        if(values[i] == 3 || values[i] == 2)
-        {
-            flag = values[i];
-        }
-        if((values[i] == 2 && flag == 3) || (values[i] == 3 && flag == 2))
-        {
-            return(6);
-        }
-    }
-
-    // check for flush
-    if(isFlush)
-    {
-        return(5);
-    }
-
-    // check for straight
-    if(isStraight)
-    {
-        return(4);
-    }
-
-    // check for three-of-a-kind
-    for(i=1; i<14; i++)
-    {
-        if(values[i] == 3)
-        {
-            return(3);
-        }
-    }
-
-    // check for two pair
-    flag = 0;
-    for(i=1; i<14; i++)
-    {
-        if(values[i] == 2)
-        {
-            flag++;
-        }
-    }
-    if(flag > 1)
-    {
-        return(2);
-    }
-
-    // check for Jacks or better and one pair
-    if(values[1] == 2 || values[11] == 2 || values[12] == 2 || values[13] == 2)
-    {
-        return(1);
-    }
-
-    return(0);
-}
-
-
-void printScore(int score)
-{
-    switch(score)
-    {
-        case 0: printf("You got nothing!");
-                break;
-
-        case 1: printf("You got a pair of jacks or better!");
-                break;
-
-        case 2: printf("You got two-pair!");
-                break;
-
-        case 3: printf("You got three-of-a-kind!");
-                break;
-
-        case 4: printf("You got a straight!");
-                break;
-
-        case 5: printf("You got a flush!");
-                break;
-
-        case 6: printf("You got a full-house!");
-                break;
-
-        case 7: printf("You got four-of-a-kind!");
-                break;
-
-        case 8: printf("You got a straight flush!");
-                break;
-
-        case 9: printf("You got a royal flush!");
-                break;
-
-        default: printf("You got an invalid score! (%d) ");
-                 printf("How is that even possible?");
-                 break;
-    }
-}
-
