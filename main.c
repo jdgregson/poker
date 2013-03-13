@@ -4,9 +4,9 @@
 #include<time.h>
 #include<string.h>
 #include <ctype.h>
-#include"wincurse.h"
 
 #ifdef __unix__
+    #include "unixcurs.h"
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
@@ -16,6 +16,7 @@
     #define CLUB "S"
 #endif
 #ifdef _WIN32
+    #include "wincurse.h"
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
@@ -29,9 +30,9 @@
 typedef struct card 
 {
     unsigned short face:4,
-            suit:2,
-            dealt:1,
-	        discard:1;
+                   suit:2,
+                   dealt:1,
+                   discard:1;
 } CARD;
 
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
@@ -43,11 +44,16 @@ void discard(CARD [], CARD []);
 void flushBuffer(void);
 void printDOSHand(CARD[], CARD[]);
 void printHand(CARD[], CARD[]);
-
+void printScore(int);
+int score(CARD);
+void discardCards(CARD[]);
 main()
 {
     int i = 0;
     int h = 0;//hand
+	int count = 0;
+	int e = 6;
+	int ptrScore = 0;
 
     CARD deck[52];
     CARD hand[5];
@@ -57,40 +63,55 @@ main()
     deal(deck,hand);
     printHand(deck,hand);
 
-	xya(1, 30);
+    CLEAR;
+    xya(1, 30);
 
-	printf("Welcome to video poker!");
-	box(3, 1, 3, 80);
+    printf("Welcome to video poker!");
+    box(3, 1, 3, 80);
 
-	xya(5, 27);
+    xya(5, 27);
 
-	printf(" Please choose a card to discard: ");
-
-	//do input for discard function here. (scanf for x's don't forget the toupper)
-
-	discard(deck,hand);
+    printf(" Please choose a card to discard: ");
 
 	printHand(deck,hand);
 
+			while(count < 5)
+		{
+			xya(26, e);
+			printf("[  ]");
+			count++;
+			e = e+14;
+		}
 
-	printf("Press any key to continue . . .");
+	discardCards(hand);
+
+    discard(deck,hand);
+
+	printHand(deck,hand);
+
+	ptrScore = score(score);
+
+	printScore(ptrScore);
+
+
+    printf("\nPress any key to continue . . .");
     BUFFER_FLUSH;
-	getchar();
+    getchar();
     exit(0);
 }
 void buildDeck(CARD deck[])
 {
     int f,s;//face suit
     int i = 0;
-    
+
     for(s = 0; s < 4; s++)
-    {	
+    {
         for(f = 1; f <= 13; f++)
             {
             deck[i].face = f;
             deck[i].suit = s;
             deck[i].dealt = 0;
-			deck[i].discard = 0;
+            deck[i].discard = 0;
             i++;
             }
     }
@@ -104,7 +125,7 @@ void deal(CARD deck[], CARD hand[])
     for(i = 0; i<52; i++)//clears deck 
     {
         deck[i].dealt = 0;
-		deck[i].discard = 0;
+        deck[i].discard = 0;
     }
 
     while(h<5)
@@ -124,7 +145,7 @@ void discard(CARD deck[], CARD hand[])
 	int h;
 	for(h = 0; h<5; h++)
     {
-	  if(deck[h].discard == 1)
+      if(deck[h].discard == 1)
       {
         while(1)
         {
@@ -176,6 +197,261 @@ void printHand(CARD deck[], CARD hand[])
 }
 void flushBuffer(void)
 {
-	char c;
-	while( (c = fgetc(stdin)) != '\n' && c != EOF);
+    char c;
+    while( (c = fgetc(stdin)) != '\n' && c != EOF);
+}
+int score(CARD * hand)
+{
+    /*  return values
+    *
+    *  0: nothing
+    *  1: pair, jacks or better
+    *  2: two-pair
+    *  3: three-of-a-kind
+    *  4: straight
+    *  5: flush
+    *  6: full house
+    *  7: four-of-a-kind
+    *  8: straight flush
+    *  9: royal flush
+    */
+
+    int values[14] = {0};
+    int i;
+    int flag = 0;
+    int isStraight = 0;
+    int isFlush = 0;
+
+    // go through the hand and record the cards that we have
+    for(i=0; i<5; i++)
+    {
+        (values[hand[i].face])++;
+    }
+
+    // check for flush
+    flag = 1;
+    for(i=0; i<4; i++)
+    {
+        if(!(hand[i].suit == hand[i+1].suit))
+        {
+            flag = 0;
+            break;
+        }
+    }
+    if(flag)
+    {
+        isFlush = 1;
+    }
+
+    // check for straight
+    flag = 0;
+    for(i=1; i<14; i++)
+    {
+        if(values[i] == 1)
+        {
+            flag++;
+            if(flag == 5)
+            {
+                break;
+            }
+        }
+        else
+        {
+            flag = 0;
+        }
+    }
+    if(flag == 5)
+    {
+        isStraight = 1;
+    }
+
+    // check for royal flush
+    if(values[1] && values[10] && values[11] && values[12] && values[13])
+    {
+        if(isFlush)
+        {
+            return(9);
+        }
+    }
+
+    // check for straight flush
+    if(isStraight && isFlush)
+    {
+        return(8);
+    }
+
+    // check for four-of-a-kind
+    for(i=1; i<14; i++)
+    {
+        if(values[i] == 4)
+        {
+            return(7);
+        }
+    }
+
+    // check for full house
+    flag = 0;
+    for(i=1; i<14; i++)
+    {
+        if(values[i] == 3 || values[i] == 2)
+        {
+            flag = values[i];
+        }
+        if((values[i] == 2 && flag == 3) || (values[i] == 3 && flag == 2))
+        {
+            return(6);
+        }
+    }
+
+    // check for flush
+    if(isFlush)
+    {
+        return(5);
+    }
+
+    // check for straight
+    if(isStraight)
+    {
+        return(4);
+    }
+
+    // check for three-of-a-kind
+    for(i=1; i<14; i++)
+    {
+        if(values[i] == 3)
+        {
+            return(3);
+        }
+    }
+
+    // check for two pair
+    flag = 0;
+    for(i=1; i<14; i++)
+    {
+        if(values[i] == 2)
+        {
+            flag++;
+        }
+    }
+    if(flag > 1)
+    {
+        return(2);
+    }
+
+    // check for Jacks or better and one pair
+    if(values[1] == 2 || values[11] == 2 || values[12] == 2 || values[13] == 2)
+    {
+        return(1);
+    }
+
+    return(0);
+}
+void printScore(int score)
+{
+    switch(score)
+    {
+        case 0: printf("You got nothing!");
+                break;
+
+        case 1: printf("You got a pair of jacks or better!");
+                break;
+
+        case 2: printf("You got two-pair!");
+                break;
+
+        case 3: printf("You got three-of-a-kind!");
+                break;
+
+        case 4: printf("You got a straight!");
+                break;
+
+        case 5: printf("You got a flush!");
+                break;
+
+        case 6: printf("You got a full-house!");
+                break;
+
+        case 7: printf("You got four-of-a-kind!");
+                break;
+
+        case 8: printf("You got a straight flush!");
+                break;
+
+        case 9: printf("You got a royal flush!");
+                break;
+
+        default: printf("You got an invalid score! (%d) ");
+                 printf("How is that even possible?");
+                 break;
+    }
+}
+void discardCards(CARD * hand)
+{
+	char choice;
+	if(hand[0].discard == 0)
+		{
+			xya(26, 7);
+			scanf("%c", &choice);
+			if(choice)
+			{
+				hand[0].discard = 1;
+			}
+			discardCards(hand);
+		}
+	else
+	{
+		if(hand[1].discard == 0)
+		{
+			xya(26, 21);
+			scanf("%c", &choice);
+			if(choice)
+				{
+					hand[1].discard = 1;
+				}
+			discardCards(hand);
+		}
+		else
+		{
+			if(hand[2].discard == 0)
+			{
+				xya(26, 35);
+				scanf("%c", &choice);
+				if(choice)
+					{
+						hand[2].discard = 1;
+					}
+				discardCards(hand);
+			}
+			else
+			{
+				if(hand[3].discard == 0)
+				{
+					xya(26, 49);
+					scanf("%c", &choice);
+					if(choice)
+						{
+							hand[3].discard = 1;
+						}
+					discardCards(hand);
+				}
+				else
+				{
+					if(hand[4].discard == 0)
+					{
+						xya(26, 63);
+						scanf("%c", &choice);
+						if(choice)
+							{
+								hand[4].discard = 1;
+							}
+						discardCards(hand);
+					}
+					else
+					{
+						printf("Need to learn poker?\n\n http://www.pokerhelper.com/poker_instructions.php");
+					}
+				}
+			}
+		}
+	}
 }
