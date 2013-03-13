@@ -391,7 +391,7 @@ void discardCards(CARD * hand)
 	
 	if(hand[0].discard == 0)
 	{
-		xya(26, 21);
+		xya(26, 7);
 		scanf("%c", &choice);
 
 		if(choice)
@@ -414,7 +414,7 @@ void discardCards(CARD * hand)
 		}
 	if(hand[2].discard == 0)
 	{
-		xya(26, 21);
+		xya(26, 35);
 		scanf("%c", &choice);
 
 		if(choice)
@@ -425,7 +425,7 @@ void discardCards(CARD * hand)
 	}
 	if(hand[3].discard == 0)
 		{
-			xya(26, 21);
+			xya(26, 49);
 			scanf("%c", &choice);
 
 			if(choice)
@@ -436,7 +436,7 @@ void discardCards(CARD * hand)
 		}
 	if(hand[4].discard == 0)
 		{
-			xya(26, 21);
+			xya(26, 63);
 			scanf("%c", &choice);
 
 			if(choice)
