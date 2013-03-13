@@ -39,6 +39,8 @@ typedef struct card
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
 char * suit[4] = {HEART, CLUB, SPADE, DIAMOND};
 
+int bank = 500;
+
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
 void discard(CARD [], CARD []);
@@ -46,7 +48,7 @@ void flushBuffer(void);
 void printDOSHand(CARD[], CARD[]);
 void printHand(CARD[], CARD[]);
 void printScore(int);
-int score(CARD);
+int score(CARD[]);
 void discardCards(CARD[]);
 main()
 {
@@ -88,11 +90,15 @@ main()
 
     discard(deck,hand);
 
+	CLEAR;
+
+
+
 	printHand(deck,hand);
 
-	//ptrScore = score(score);
+	xya(26, 1);
 
-	printScore(ptrScore);
+	printScore(score(hand));
 
 
     printf("\nPress any key to continue . . .");
@@ -404,71 +410,4 @@ void discardCards(CARD * hand)
 			}
 	}
 
-/*	if(hand[0].x == 0)
-	{
-		xya(26, 7);
-		scanf("%c", &choice);
-		BUFFER_FLUSH;
-
-		if(toupper(choice) == 'X')
-			{
-				hand[0].discard = 1;
-			}
-		hand[0].x = 1;
-		discardCards(hand);
-	}
-
-	if(hand[1].x == 0)
-		{
-			xya(26, 21);
-			scanf("%c", &choice);
-			BUFFER_FLUSH;
-
-			if(toupper(choice) == 'X')
-				{
-					hand[1].discard = 1;
-				}
-			hand[1].x = 1;
-			discardCards(hand);
-		}
-	if(hand[2].x  == 0)
-	{
-		xya(26, 35);
-		scanf("%c", &choice);
-		BUFFER_FLUSH;
-
-		if(toupper(choice) == 'X')
-			{
-				hand[2].discard = 1;
-			}
-		hand[2].x = 1;
-		discardCards(hand);
-	}
-	if(hand[3].x == 0)
-		{
-			xya(26, 49);
-			scanf("%c", &choice);
-			BUFFER_FLUSH;
-
-			if(toupper(choice) == 'X')
-				{
-					hand[3].discard = 1;
-				}
-			hand[3].x = 1;
-			discardCards(hand);
-		}
-	if(hand[4].x == 0)
-		{
-			xya(26, 63);
-			scanf("%c", &choice);
-			BUFFER_FLUSH;
-
-			if(toupper(choice) == 'X')
-				{
-					hand[4].discard = 1;
-				}
-			hand[4].x = 1;
-			discardCards(hand);
-		}
-*/
 }
