@@ -32,7 +32,8 @@ typedef struct card
     unsigned short face:4,
                    suit:2,
                    dealt:1,
-                   discard:1;
+                   discard:1,
+				   x:1;
 } CARD;
 
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
@@ -387,62 +388,72 @@ void printScore(int score)
 }
 void discardCards(CARD * hand)
 {
-	char choice;
+	char choice = 0;
 	
-	if(hand[0].discard == 0)
+	if(hand[0].x == 0)
 	{
 		xya(26, 7);
 		scanf("%c", &choice);
+		BUFFER_FLUSH;
 
-		if(choice)
+		if(toupper(choice) == 'X')
 			{
 				hand[0].discard = 1;
 			}
+		hand[0].x = 1;
 		discardCards(hand);
 	}
 
-	if(hand[1].discard == 0)
+	if(hand[1].x == 0)
 		{
 			xya(26, 21);
 			scanf("%c", &choice);
+			BUFFER_FLUSH;
 
-			if(choice)
+			if(toupper(choice) == 'X')
 				{
 					hand[1].discard = 1;
 				}
+			hand[1].x = 1;
 			discardCards(hand);
 		}
-	if(hand[2].discard == 0)
+	if(hand[2].x  == 0)
 	{
 		xya(26, 35);
 		scanf("%c", &choice);
+		BUFFER_FLUSH;
 
-		if(choice)
+		if(toupper(choice) == 'X')
 			{
 				hand[2].discard = 1;
 			}
+		hand[2].x = 1;
 		discardCards(hand);
 	}
-	if(hand[3].discard == 0)
+	if(hand[3].x == 0)
 		{
 			xya(26, 49);
 			scanf("%c", &choice);
+			BUFFER_FLUSH;
 
-			if(choice)
+			if(toupper(choice) == 'X')
 				{
 					hand[3].discard = 1;
 				}
+			hand[3].x = 1;
 			discardCards(hand);
 		}
-	if(hand[4].discard == 0)
+	if(hand[4].x == 0)
 		{
 			xya(26, 63);
 			scanf("%c", &choice);
+			BUFFER_FLUSH;
 
-			if(choice)
+			if(toupper(choice) == 'X')
 				{
 					hand[4].discard = 1;
 				}
+			hand[4].x = 1;
 			discardCards(hand);
 		}
 
