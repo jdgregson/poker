@@ -89,7 +89,7 @@ main()
 
 	printHand(deck,hand);
 
-	ptrScore = score(score);
+	//ptrScore = score(score);
 
 	printScore(ptrScore);
 
@@ -388,70 +388,62 @@ void printScore(int score)
 void discardCards(CARD * hand)
 {
 	char choice;
+	
 	if(hand[0].discard == 0)
-		{
-			xya(26, 7);
-			scanf("%c", &choice);
-			if(choice)
+	{
+		xya(26, 21);
+		scanf("%c", &choice);
+
+		if(choice)
 			{
 				hand[0].discard = 1;
 			}
-			discardCards(hand);
-		}
-	else
-	{
-		if(hand[1].discard == 0)
+		discardCards(hand);
+	}
+
+	if(hand[1].discard == 0)
 		{
 			xya(26, 21);
 			scanf("%c", &choice);
+
 			if(choice)
 				{
 					hand[1].discard = 1;
 				}
 			discardCards(hand);
 		}
-		else
-		{
-			if(hand[2].discard == 0)
+	if(hand[2].discard == 0)
+	{
+		xya(26, 21);
+		scanf("%c", &choice);
+
+		if(choice)
 			{
-				xya(26, 35);
-				scanf("%c", &choice);
-				if(choice)
-					{
-						hand[2].discard = 1;
-					}
-				discardCards(hand);
+				hand[2].discard = 1;
 			}
-			else
-			{
-				if(hand[3].discard == 0)
-				{
-					xya(26, 49);
-					scanf("%c", &choice);
-					if(choice)
-						{
-							hand[3].discard = 1;
-						}
-					discardCards(hand);
-				}
-				else
-				{
-					if(hand[4].discard == 0)
-					{
-						xya(26, 63);
-						scanf("%c", &choice);
-						if(choice)
-							{
-								hand[4].discard = 1;
-							}
-						discardCards(hand);
-					}
-					else
-					{
-						printf("Need to learn poker?\n\n http://www.pokerhelper.com/poker_instructions.php");
-					}
-				}
-			}
-		}
+		discardCards(hand);
 	}
+	if(hand[3].discard == 0)
+		{
+			xya(26, 21);
+			scanf("%c", &choice);
+
+			if(choice)
+				{
+					hand[3].discard = 1;
+				}
+			discardCards(hand);
+		}
+	if(hand[4].discard == 0)
+		{
+			xya(26, 21);
+			scanf("%c", &choice);
+
+			if(choice)
+				{
+					hand[4].discard = 1;
+				}
+			discardCards(hand);
+		}
+
 }
