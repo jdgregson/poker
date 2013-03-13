@@ -16,7 +16,7 @@
     #define CLUB "S"
 #endif
 #ifdef _WIN32
-    #include "wincurse.h"
+    #include "wincurs.h"
     #define CLEAR system("cls")
     #define BUFFER_FLUSH fflush(stdin)
     #define PAUSE system("pause")
