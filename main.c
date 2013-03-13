@@ -10,10 +10,10 @@
     #define CLEAR system("clear")
     #define BUFFER_FLUSH flushBuffer()
     #define PAUSE getchar()
-    #define HEART "H"
-    #define DIAMOND "D"
-    #define SPADE "C"
-    #define CLUB "S"
+    #define HEART 72
+    #define DIAMOND 68
+    #define SPADE 67
+    #define CLUB 83
 #endif
 #ifdef _WIN32
     #include "wincurs.h"
@@ -27,7 +27,7 @@
 
 #endif
 
-typedef struct card 
+typedef struct card
 {
     unsigned short face:4,
                    suit:2,
@@ -37,7 +37,7 @@ typedef struct card
 } CARD;
 
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
-char * suit[4] = {HEART, CLUB, SPADE, DIAMOND};
+char suit[4] = {HEART, CLUB, SPADE, DIAMOND};
 
 int bank = 500;
 
@@ -345,7 +345,7 @@ int score(CARD * hand)
         return(2);
     }
 
-    // check for Jacks or better and one pair
+    // check for a pair of Jacks or better
     if(values[1] == 2 || values[11] == 2 || values[12] == 2 || values[13] == 2)
     {
         return(1);
@@ -387,7 +387,7 @@ void printScore(int score)
         case 9: printf("You got a royal flush!");
                 break;
 
-        default: printf("You got an invalid score! (%d) ");
+        default: printf("You got an invalid score! (%d) ", score);
                  printf("How is that even possible?");
                  break;
     }
