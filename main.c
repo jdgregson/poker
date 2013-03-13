@@ -146,7 +146,7 @@ void discard(CARD deck[], CARD hand[])
 	int h;
 	for(h = 0; h<5; h++)
     {
-      if(deck[h].discard == 1)
+      if(hand[h].discard == 1)
       {
         while(1)
         {
