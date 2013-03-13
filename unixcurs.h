@@ -17,23 +17,6 @@ char GETCH(void);
 char GETCHE(void);
 void TextColor(short);
 
-#define TEXT_BLACK 30
-#define TEXT_RED 31
-#define TEXT_GREEN 32
-#define TEXT_YELLOW 33
-#define TEXT_BLUE 34
-#define TEXT_MAGENTA 35
-#define TEXT_CYAN 36
-#define TEXT_WHITE 37
-#define BG_BLACK 40
-#define BG_RED 41
-#define BG_GREEN 42
-#define BG_YELLOW 43
-#define BG_BLUE 44
-#define BG_MAGENTA 45
-#define BG_CYAN 46
-#define BG_WHITE 47
-
 #define FORE_BLACK    0x0000
 #define FORE_BLUE     0x0001
 #define FORE_GREEN    0x0002
@@ -84,6 +67,10 @@ void xya(int row, int col)
 void box(int r, int c, int l, int w)
 {
     int i;
+    // The font size is generally different between
+    // DOS and Unix terminals, making the Unix boxes
+    // a little squished, so increase the width of
+    // the box by a percentage of the box asked for.
     w += w*.30;
 
     xya(r, c+1);
@@ -117,8 +104,7 @@ void box(int r, int c, int l, int w)
 // RETURNS : The char received from the console
 char GETCH(void)
 {
-    char character = getchar();
-    return(character);
+    return(getchar());
 }
 
 
