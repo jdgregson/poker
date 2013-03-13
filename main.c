@@ -32,8 +32,8 @@ typedef struct card
     unsigned short face:4,
                    suit:2,
                    dealt:1,
-                   discard:1,
-				   x:1;
+                   discard:1;
+//				   x:1;
 } CARD;
 
 char * face[14] = {"0","1","2","3","4","5","6","7","8","9","10","J","Q","K"};
@@ -388,9 +388,23 @@ void printScore(int score)
 }
 void discardCards(CARD * hand)
 {
+	int i;
+	int width = 7;
 	char choice = 0;
 	
-	if(hand[0].x == 0)
+    for(i=0;i<5;i++, width+=14)
+	{
+		xya(26, width);
+		scanf("%c", &choice);
+		BUFFER_FLUSH;
+
+		if(toupper(choice) == 'X')
+			{
+				hand[i].discard = 1;
+			}
+	}
+
+/*	if(hand[0].x == 0)
 	{
 		xya(26, 7);
 		scanf("%c", &choice);
@@ -456,5 +470,5 @@ void discardCards(CARD * hand)
 			hand[4].x = 1;
 			discardCards(hand);
 		}
-
+*/
 }
