@@ -75,7 +75,7 @@ main()
            printf("Welcome to video poker!");
            box(3, 1, 3, 80);
 
-		printf("\n\n Funds available: %d", &maximum);
+		printf("\n\n Funds available: %d", maximum);
 	    printf("\n\nEnter amount you'd like to bet: ");
 		scanf("%d", &wager);
 	    BUFFER_FLUSH;
