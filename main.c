@@ -1,4 +1,3 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -70,22 +69,24 @@ main()
 	   choice = 0;
 	   deal(deck,hand);
 
-           //CLEAR;
+           CLEAR;
            xya(1, 30);
 
            printf("Welcome to video poker!");
            box(3, 1, 3, 80);
 
-	    printf("Enter amount you'd like to bet: ");
-            scanf("%d", &wager);
+		printf("\n\n Funds available: %d", &maximum);
+	    printf("\n\nEnter amount you'd like to bet: ");
+		scanf("%d", &wager);
 	    BUFFER_FLUSH;
+
 	    xya(5, 27);
 
             printf(" Please choose a card to discard: ");
 
 	    printHand(deck,hand);
 
-	    while(count < 5)
+	    while(count < 5 && wager < maximum)
 		 {
 		 	xya(26, e);
 			printf("[  ]");
