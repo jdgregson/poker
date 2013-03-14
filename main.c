@@ -380,7 +380,14 @@ int score(CARD * hand)
 }
 void printScore(int score)
 {
-    score<1?maximum-=wager:maximum+=wager*score;
+    if(score < 1)
+    {
+        maximum -= wager;
+    }
+    else
+    {
+        maximum += wager*score;
+    }
 
     switch(score)
     {
