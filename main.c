@@ -64,7 +64,7 @@ main()
     buildDeck(deck);
 
 
-	while(toupper(choice) == 'Y' && maximum > 0)
+	while(toupper(choice) == 'Y' && maximum > 0 && wager <= maximum)
 	{
 	   choice = 0;
 	   deal(deck,hand);
@@ -86,7 +86,7 @@ main()
 
 	    printHand(deck,hand);
 
-	    while(count < 5 && wager < maximum)
+	    while(count < 5)
 		 {
 		 	xya(26, e);
 			printf("[  ]");
