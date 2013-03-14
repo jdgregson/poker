@@ -45,7 +45,6 @@ void buildDeck(CARD []);
 void deal(CARD [], CARD []);
 void discard(CARD [], CARD []);
 void flushBuffer(void);
-void printDOSHand(CARD[], CARD[]);
 void printHand(CARD[], CARD[]);
 void printScore(int);
 int score(CARD[]);
@@ -101,10 +100,12 @@ main()
 	    printHand(deck,hand);
 	    xya(26, 1);
 	    printScore(score(hand));
-        printf("\nPlay again?");
+            printf("\nPlay again?");
 	    scanf("%c", &choice);
-        BUFFER_FLUSH;
-		CLEAR;
+            BUFFER_FLUSH;
+	    CLEAR;
+	    wager = 0;
+	
 	}
 
     printf("Thanks for playing!");
