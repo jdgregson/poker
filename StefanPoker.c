@@ -38,71 +38,80 @@ typedef struct card
 char * face[14] = {"0","A","2","3","4","5","6","7","8","9","10","J","Q","K"};//Changed 1 to Ace
 char suit[4] = {HEART, CLUB, SPADE, DIAMOND};
 
-int bank = 500;
+int maximum = 500;
+int wager;
 
 void buildDeck(CARD []);
 void deal(CARD [], CARD []);
 void discard(CARD [], CARD []);
 void flushBuffer(void);
-void printDOSHand(CARD[], CARD[]);
 void printHand(CARD[], CARD[]);
 void printScore(int);
 int score(CARD[]);
 void discardCards(CARD[]);
 main()
 {
-    int i = 0;//? Do we need these?
+    int i = 0;
     int h = 0;//hand
 	int count = 0;
 	int e = 6;
-	int ptrScore = 0;
+
+	char choice = 'Y';
 
     CARD deck[52];
     CARD hand[5];
     srand(time(NULL));
 
     buildDeck(deck);
-    deal(deck,hand);
-    printHand(deck,hand);
 
-    CLEAR;
-    xya(1, 30);
 
-    printf("Welcome to video poker!");
-    box(3, 1, 3, 80);
+	while(toupper(choice) == 'Y' && maximum > 0)
+	{
+	   choice = 0;
+	   deal(deck,hand);
 
-    xya(5, 27);
+           //CLEAR;
+           xya(1, 30);
 
-    printf(" Please choose a card to discard: ");
+           printf("Welcome to video poker!");
+           box(3, 1, 3, 80);
 
-	printHand(deck,hand);
+	    printf("Enter amount you'd like to bet: ");
+            scanf("%d", &wager);
+	    BUFFER_FLUSH;
+	    xya(5, 27);
 
-			while(count < 5)
-		{
-			xya(26, e);
+            printf(" Please choose a card to discard: ");
+
+	    printHand(deck,hand);
+
+	    while(count < 5)
+		 {
+		 	xya(26, e);
 			printf("[  ]");
 			count++;
 			e = e+14;
-		}
+		 }count = 0;e = 6;
+		
 
-	discardCards(hand);
+	    discardCards(hand);
+            discard(deck,hand);
+	    CLEAR;
+	    printHand(deck,hand);
+	    xya(26, 1);
+	    printScore(score(hand));
+            printf("\nPlay again?");
+	    scanf("%c", &choice);
+            BUFFER_FLUSH;
+	    CLEAR;
+	    wager = 0;
+	
+	}
 
-    discard(deck,hand);
-
-	CLEAR;
-
-
-
-	printHand(deck,hand);
-
-	xya(26, 1);
-
-	printScore(score(hand));
-
-
-    printf("\nPress any key to continue . . .");
-    BUFFER_FLUSH;
+    printf("Thanks for playing!");
     getchar();
+
+
     exit(0);
 }
 void buildDeck(CARD deck[])
