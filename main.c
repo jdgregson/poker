@@ -355,6 +355,8 @@ int score(CARD * hand)
 }
 void printScore(int score)
 {
+    score<1?maximum-=wager:maximum+=wager*score;
+
     switch(score)
     {
         case 0: printf("You got nothing!");
