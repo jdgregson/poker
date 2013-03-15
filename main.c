@@ -170,7 +170,7 @@ if(check == 10)
 {
        
 		
-		hand[0] = deck[9];
+	hand[0] = deck[9];
         hand[1] = deck[10];
         hand[2] = deck[11];
         hand[3] = deck[12];
